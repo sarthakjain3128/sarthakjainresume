@@ -1,0 +1,744 @@
+/* =========================================================
+   Sarthak Jain — Resume Website Stylesheet (light theme)
+   Concepts used: custom properties, Google Fonts, colour
+   palette, box model, Flexbox, Grid, positioning (sticky,
+   relative, absolute, fixed), many selector types,
+   pseudo-classes/elements, transitions and media queries.
+   ========================================================= */
+
+/* ---------- 1. Colour palette & design tokens ---------- */
+:root {
+  --bg: #fbf8f3;          /* warm ivory page */
+  --surface: #ffffff;     /* cards */
+  --ink: #1f2a44;         /* deep navy text */
+  --muted: #5d6680;       /* secondary text */
+  --line: #ebe4d8;        /* soft borders */
+  --accent: #ff6b4a;      /* coral highlight */
+  --accent-soft: #ffe4d9; /* peach */
+  --sky: #dfe9ff;         /* pastel blue */
+  --mint: #dcf3e8;        /* pastel green */
+  --butter: #fff3c4;      /* pastel yellow */
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  --radius: 20px;
+  --max-width: 1120px;
+  --shadow: 0 18px 40px -22px rgba(31, 42, 68, 0.35);
+}
+
+/* ---------- 2. Reset (universal selector) ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* ---------- 3. Base typography (type selectors) ---------- */
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+/* ---------- 4. Sticky header (position: sticky) ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 6vw;
+  background: rgba(251, 248, 243, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.logo span {                       /* descendant selector */
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+
+.nav-links > li > a {              /* child combinator */
+  position: relative;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.25s ease;
+}
+
+/* Animated underline using ::after + absolute positioning */
+.nav-links a:not(.nav-cta)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.25s ease;
+}
+
+.nav-links a:hover {               /* pseudo-class */
+  color: var(--ink);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links .nav-cta {
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.nav-links .nav-cta:hover {
+  background: var(--accent);
+  color: var(--surface);
+}
+
+/* ---------- 5. Layout container ---------- */
+main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 6vw;
+}
+
+/* ---------- 6. Hero (Grid + relative/absolute positioning) ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: center;
+  gap: 3rem;
+  min-height: min(82vh, 760px);
+  padding: 4rem 0;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: var(--mint);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.4rem;
+}
+
+.hero h1 {
+  font-size: clamp(3.2rem, 9vw, 6.5rem);
+}
+
+.tagline {
+  max-width: 34rem;
+  margin-top: 1.4rem;
+  font-size: 1.15rem;
+  color: var(--muted);
+}
+
+.tagline strong {
+  color: var(--ink);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.2rem;
+}
+
+/* The art box is the positioning parent for the floating cards */
+.hero-art {
+  position: relative;
+  height: 420px;
+}
+
+.blob {
+  position: absolute;
+  inset: 8% 6%;
+  border-radius: 46% 54% 40% 60% / 55% 45% 55% 45%;
+  background: linear-gradient(135deg, #ffd3c2, #cfdcff);
+}
+
+.monogram {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 7rem;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--surface);
+  text-shadow: 0 6px 24px rgba(31, 42, 68, 0.15);
+}
+
+.stat {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 0.9rem 1.2rem;
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.stat strong {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1.1;
+}
+
+.stat span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.stat:hover {
+  transform: translateY(-6px) rotate(0deg);
+}
+
+.stat-1 { top: 2%;  left: 0;    transform: rotate(-4deg); }
+.stat-2 { top: 40%; right: -2%; transform: rotate(3deg); }
+.stat-3 { bottom: 2%; left: 12%; transform: rotate(-2deg); }
+
+.stat-1 strong { color: var(--accent); }
+.stat-3 { background: var(--butter); }
+
+/* ---------- 7. Buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 2px solid var(--ink);
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+}
+
+.btn-outline:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+/* ---------- 8. Sections ---------- */
+.section {
+  padding: 5rem 0;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  margin-bottom: 2.5rem;
+}
+
+.section-title .num {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* ---------- 9. About (CSS Grid) ---------- */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 3rem;
+  color: var(--muted);
+}
+
+.about-grid p + p {                /* adjacent sibling combinator */
+  margin-top: 1rem;
+}
+
+.about-grid .lead {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* Highlighter-pen effect with a gradient background */
+.mark {
+  background: linear-gradient(transparent 60%, var(--butter) 60%);
+}
+
+/* ---------- 10. Education timeline (::before markers) ---------- */
+.timeline {
+  position: relative;
+  padding-left: 2.2rem;
+  border-left: 2px dashed var(--line);
+}
+
+.timeline li {
+  position: relative;
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1.2rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.timeline li:last-child {          /* structural pseudo-class */
+  margin-bottom: 0;
+}
+
+.timeline li:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.timeline li::before {             /* dot on the line */
+  content: "";
+  position: absolute;
+  left: calc(-2.2rem - 9px);
+  top: 1.8rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 3px solid var(--accent);
+}
+
+.timeline li:nth-child(-n + 2)::before {   /* current studies filled */
+  background: var(--accent);
+}
+
+.year {
+  display: inline-block;
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+  background: var(--sky);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.timeline h3 {
+  font-size: 1.3rem;
+  margin: 0.6rem 0 0.3rem;
+}
+
+.degree {
+  font-weight: 600;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* ---------- 11. Achievements (auto-fit Grid) ---------- */
+.achieve-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+}
+
+.achieve {
+  padding: 1.6rem;
+  border-radius: var(--radius);
+  transition: transform 0.25s ease;
+}
+
+/* :nth-child gives each card its own pastel colour */
+.achieve:nth-child(1) { background: var(--accent-soft); }
+.achieve:nth-child(2) { background: var(--butter); }
+.achieve:nth-child(3) { background: var(--sky); }
+.achieve:nth-child(4) { background: var(--mint); }
+
+.achieve:hover {
+  transform: translateY(-6px) rotate(-1deg);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  border-radius: 14px;
+  background: var(--surface);
+  font-size: 1.4rem;
+}
+
+.achieve h3 {
+  font-size: 1.35rem;
+  margin-bottom: 0.3rem;
+}
+
+.achieve p {
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+/* ---------- 12. Project cards ---------- */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  position: relative;
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Coral bar that slides in on hover */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow);
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+.card-tag {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  background: var(--mint);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.card:nth-child(2) .card-tag {
+  background: var(--sky);
+}
+
+.card h3 {
+  font-size: 1.5rem;
+  margin: 0.9rem 0;
+}
+
+/* Custom tick bullets with ::before */
+.ticks li {
+  position: relative;
+  padding-left: 1.6rem;
+  color: var(--muted);
+}
+
+.ticks li + li {
+  margin-top: 0.5rem;
+}
+
+.ticks li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ---------- 13. Skills (attribute selectors drive bar width) ---------- */
+.skills-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+}
+
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.skill-list li {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.9rem;
+  font-weight: 600;
+}
+
+.skill-list small {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* grey track + coloured fill */
+.skill-list li::before,
+.skill-list li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 7px;
+  border-radius: 999px;
+}
+
+.skill-list li::before {
+  width: 100%;
+  background: var(--line);
+}
+
+.skill-list li::after {
+  background: linear-gradient(90deg, var(--accent), #ffa58c);
+}
+
+.skill-list li[data-level="beginner"]::after     { width: 35%; }
+.skill-list li[data-level="working"]::after      { width: 55%; }
+.skill-list li[data-level="intermediate"]::after { width: 65%; }
+.skill-list li[data-level="strong"]::after       { width: 85%; }
+
+.interests h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.interests h3:not(:first-child) {
+  margin-top: 2rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.chips li {
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.chips li:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* ---------- 14. Contact ---------- */
+.contact-box {
+  position: relative;
+  padding: 3.5rem;
+  border-radius: 28px;
+  background: linear-gradient(135deg, var(--accent-soft), var(--butter) 55%, var(--mint));
+  overflow: hidden;
+}
+
+/* decorative circle using absolute positioning */
+.contact-box::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  top: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 30px solid rgba(255, 255, 255, 0.5);
+}
+
+.contact-lead {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  margin-bottom: 0.6rem;
+}
+
+.contact-box > p {
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+.contact-list {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.contact-list a {
+  display: block;
+  padding: 0.9rem 1.4rem;
+  border-radius: 999px;
+  background: var(--surface);
+  font-weight: 600;
+  box-shadow: 0 8px 20px -14px rgba(31, 42, 68, 0.5);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.contact-list a:hover {
+  background: var(--ink);
+  color: var(--bg);
+  transform: translateY(-3px);
+}
+
+/* Attribute selectors — icons based on the link type */
+a[target="_blank"]::after {
+  content: " ↗";
+}
+
+a[href^="mailto:"]::before {
+  content: "✉  ";
+}
+
+a[href^="tel:"]::before {
+  content: "☎  ";
+}
+
+a[href$=".pdf"]::before {          /* "ends with" attribute selector */
+  content: "⬇  ";
+}
+
+/* ---------- 15. Footer + fixed back-to-top button ---------- */
+.site-footer {
+  padding: 2rem 6vw;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.back-to-top {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--surface);
+  font-size: 1.3rem;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(255, 107, 74, 0.35);
+  transition: transform 0.2s ease;
+}
+
+.back-to-top:hover {
+  transform: translateY(-4px);
+}
+
+/* ---------- 16. Responsive design (media queries) ---------- */
+@media (max-width: 900px) {
+  .hero,
+  .about-grid,
+  .skills-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: auto;
+    gap: 2rem;
+  }
+
+  .hero-art {
+    height: 320px;
+    max-width: 420px;
+  }
+
+  .nav-links li:nth-child(-n + 5) {  /* keep only the Contact button */
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 3.5rem 0;
+  }
+
+  .contact-box {
+    padding: 2.2rem 1.5rem;
+  }
+
+  .monogram {
+    font-size: 5rem;
+  }
+}
